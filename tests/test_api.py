@@ -1,23 +1,19 @@
 from fastapi.testclient import TestClient
 
-from pdd_ai_coach.main import app
 
-client = TestClient(app)
-
-
-def test_health() -> None:
+def test_health(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
-def test_get_rule() -> None:
-    response = client.get("/v1/rules/10.2")
+def test_get_rule(client: TestClient) -> None:
+    response = client.get("/v1/rules/91")
     assert response.status_code == 200
-    assert response.json()["number"] == "10.2"
+    assert response.json()["number"] == "91"
 
 
-def test_get_rule_not_found() -> None:
+def test_get_rule_not_found(client: TestClient) -> None:
     response = client.get("/v1/rules/99.3")
     assert response.status_code == 404
     assert response.json() == {"detail": "Rule not found"}
